@@ -1,6 +1,6 @@
 ﻿namespace Diploma.Interfaces.Services
 {
-    public interface IOrderService
+    public interface ICustomerService
     {
     }
 }
