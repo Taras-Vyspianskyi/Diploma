@@ -1,6 +1,6 @@
-﻿namespace Diploma.Interfaces.Models
+﻿namespace Diploma.Interfaces.Services.Account.Dto
 {
-    public class LoginModel
+    public class LoginRequestDto : BaseRequestDto
     {
         public string Email { get; set; }
 

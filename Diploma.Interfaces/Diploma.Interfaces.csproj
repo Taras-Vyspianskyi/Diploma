@@ -9,4 +9,10 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Contracts\Account\" />
+    <Folder Include="Contracts\Order\" />
+    <Folder Include="Contracts\Worker\" />
+  </ItemGroup>
+
 </Project>

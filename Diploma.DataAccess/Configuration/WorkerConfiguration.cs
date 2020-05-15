@@ -8,11 +8,15 @@ namespace Diploma.DataAccess.Configuration
     {
         public void Configure(EntityTypeBuilder<Worker> builder)
         {
-            builder.Property(b => b.TransportType).IsRequired();
+            builder.Property(b => b.TransportType)
+                .IsRequired();
 
-            builder.Property(b => b.Category).IsRequired();
+            builder.Property(b => b.Category)
+                .IsRequired();
 
-            builder.Property(b => b.CrewId).IsRequired();
+            builder.Property(b => b.CrewId)
+                .IsRequired()
+                .ValueGeneratedOnAdd();
         }
     }
 }
