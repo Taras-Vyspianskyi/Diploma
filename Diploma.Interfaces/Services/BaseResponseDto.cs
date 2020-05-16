@@ -27,5 +27,11 @@ namespace Diploma.Interfaces.Services
             this.ErrorMessage = message;
             return this;
         }
+
+        public void SetErrorMessage(string message)
+        {
+            this.IsError = true;
+            this.ErrorMessage = message;   
+        }
     }
 }

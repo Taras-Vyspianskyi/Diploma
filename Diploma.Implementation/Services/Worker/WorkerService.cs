@@ -4,7 +4,7 @@ using Diploma.Interfaces.Services.Worker.Dto;
 
 namespace Diploma.Implementation.Services.Worker
 {
-    public class WorkerService : IWorkerService
+    public class WorkerService : BaseService, IWorkerService
     {
         public Task<GetCrewMembersResponseDto> GetCrewMembers(GetCrewMembersRequestDto requestDto)
         {

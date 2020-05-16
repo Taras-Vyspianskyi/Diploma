@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diploma.Interfaces", "Diplo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diploma.Implementation", "Diploma.Implementation\Diploma.Implementation.csproj", "{6FD0F6F7-6DAD-4160-8E57-9BAABBA741EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diploma.DataAccess", "Diploma.DataAccess\Diploma.DataAccess.csproj", "{1E8413CC-61A0-4586-8946-F3D789DAC678}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diploma.DataAccess", "Diploma.DataAccess\Diploma.DataAccess.csproj", "{1E8413CC-61A0-4586-8946-F3D789DAC678}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diploma.Utils", "Diploma.Utils\Diploma.Utils.csproj", "{21CC8A55-BE87-4483-9DE7-AF86D2FF728C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{1E8413CC-61A0-4586-8946-F3D789DAC678}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E8413CC-61A0-4586-8946-F3D789DAC678}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E8413CC-61A0-4586-8946-F3D789DAC678}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21CC8A55-BE87-4483-9DE7-AF86D2FF728C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21CC8A55-BE87-4483-9DE7-AF86D2FF728C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21CC8A55-BE87-4483-9DE7-AF86D2FF728C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21CC8A55-BE87-4483-9DE7-AF86D2FF728C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
