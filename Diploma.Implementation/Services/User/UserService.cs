@@ -4,7 +4,7 @@ using Diploma.Interfaces.Services.User.Dto;
 
 namespace Diploma.Implementation.Services.User
 {
-    public class UserService : IUserService
+    public class UserService : BaseService, IUserService
     {
         public Task<GetUserInfoResponseDto> GetUserInfo(GetUserInfoRequestDto requestDto)
         {

@@ -4,11 +4,11 @@ using Diploma.Interfaces.Services.Account.Dto;
 
 namespace Diploma.Implementation.Services.Account
 {
-    public class AccountService : ServiceBase, IAccountService
+    public class AccountService : BaseService, IAccountService
     {
         public Task<LoginResponseDto> Login(LoginRequestDto requestDto)
         {
-            return ErrorHandler
+            throw new System.NotImplementedException();
         }
 
         public Task<LogoutResponseDto> Logout(LogoutRequestDto requestDto)

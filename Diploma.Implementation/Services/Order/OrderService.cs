@@ -4,7 +4,7 @@ using Diploma.Interfaces.Services.Order.Dto;
 
 namespace Diploma.Implementation.Services.Order
 {
-    public class OrderService : IOrderService
+    public class OrderService : BaseService, IOrderService
     {
         public Task<CreateOrderResponseDto> CreateOrder(CreateOrderRequestDto requestDto)
         {

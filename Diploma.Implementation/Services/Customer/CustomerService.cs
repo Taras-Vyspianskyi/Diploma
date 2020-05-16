@@ -4,7 +4,7 @@ using Diploma.Interfaces.Services.Customer.Dto;
 
 namespace Diploma.Implementation.Services.Customer
 {
-    public class CustomerService : ICustomerService
+    public class CustomerService : BaseService, ICustomerService
     {
         public Task<GetCustomerInfoResponseDto> GetCustomerInfo(GetCustomerInfoRequestDto requestDto)
         {
