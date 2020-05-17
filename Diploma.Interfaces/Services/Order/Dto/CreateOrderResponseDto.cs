@@ -2,6 +2,8 @@
 {
     public class CreateOrderResponseDto : BaseResponseDto
     {
-        public int OperatorId { get; set; }
+        public string OrderId { get; set; }
+
+        public string OperatorId { get; set; }
     }
 }

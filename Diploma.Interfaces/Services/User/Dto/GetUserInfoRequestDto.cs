@@ -1,7 +1,9 @@
-﻿namespace Diploma.Interfaces.Services.User.Dto
+﻿using System.Security.Claims;
+
+namespace Diploma.Interfaces.Services.User.Dto
 {
     public class GetUserInfoRequestDto : BaseRequestDto
     {
-        public int UserId { get; set; }
+        public ClaimsPrincipal ClaimsPrincipal { get; set; }
     }
 }

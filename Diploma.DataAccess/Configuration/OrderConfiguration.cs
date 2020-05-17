@@ -22,7 +22,7 @@ namespace Diploma.DataAccess.Configuration
             builder.Property(b => b.Category)
                 .IsRequired();
 
-            builder.Property(b => b.OrderTime)
+            builder.Property(b => b.Time)
                 .IsRequired();
 
             builder.Property(b => b.Status)

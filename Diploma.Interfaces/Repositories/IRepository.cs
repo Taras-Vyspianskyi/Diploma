@@ -7,7 +7,7 @@ namespace Diploma.Interfaces.Repositories
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        Task<TEntity> GetByIdAsync(int id);
+        Task<TEntity> GetByIdAsync(string id);
 
         Task<IEnumerable<TEntity>> GetAllAsync();
 

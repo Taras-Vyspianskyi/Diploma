@@ -4,9 +4,15 @@ namespace Diploma.Interfaces.Services.Order.Dto
 {
     public class CreateOrderRequestDto : BaseRequestDto
     {
-        public string OrderId { get; set; }
+        public string CustomerId { get; set; }
 
-        public int CustomerId { get; set; }
+        public string AddressLine1 { get; set; }
+
+        public string AddressLine2 { get; set; }
+
+        public string OperatorId { get; set; }
+
+        public string CrewId { get; set; }
 
         public WorkerCategoryEnum Category { get; set; }
     }

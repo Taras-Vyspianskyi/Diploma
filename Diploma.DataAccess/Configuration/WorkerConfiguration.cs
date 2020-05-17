@@ -8,6 +8,9 @@ namespace Diploma.DataAccess.Configuration
     {
         public void Configure(EntityTypeBuilder<Worker> builder)
         {
+            builder.Property(b => b.UserId)
+                .IsRequired();
+
             builder.Property(b => b.TransportType)
                 .IsRequired();
 

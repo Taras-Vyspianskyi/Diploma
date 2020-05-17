@@ -14,24 +14,5 @@ namespace Diploma.Interfaces.Services
         {
             return !this.IsError;
         }
-
-        public BaseResponseDto AsSuccess()
-        {
-            this.IsError = false;
-            return this;
-        }
-
-        public BaseResponseDto AsError(string message)
-        {
-            this.IsError = true;
-            this.ErrorMessage = message;
-            return this;
-        }
-
-        public void SetErrorMessage(string message)
-        {
-            this.IsError = true;
-            this.ErrorMessage = message;   
-        }
     }
 }

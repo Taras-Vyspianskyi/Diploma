@@ -2,8 +2,10 @@
 
 namespace Diploma.Interfaces.Entities
 {
-    public class Worker : User
+    public class Worker
     {
+        public string UserId { get; set; }
+
         public TransportTypeEnum TransportType { get; set; }
 
         public WorkerCategoryEnum Category { get; set; }

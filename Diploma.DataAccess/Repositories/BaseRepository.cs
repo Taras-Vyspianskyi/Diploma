@@ -17,7 +17,7 @@ namespace Diploma.DataAccess.Repositories
 
         public async Task AddAsync(TEntity entity)
         {
-            await dbContext.Set<TEntity>().AddAsync(entity);
+            var newItem = await dbContext.Set<TEntity>().AddAsync(entity);
         }
 
         public async Task AddRangeAsync(IEnumerable<TEntity> entities)
@@ -34,7 +34,7 @@ namespace Diploma.DataAccess.Repositories
             return await dbContext.Set<TEntity>().ToListAsync();
         }
 
-        public async Task<TEntity> GetByIdAsync(int id)
+        public async Task<TEntity> GetByIdAsync(string id)
         {
             return await dbContext.Set<TEntity>().FindAsync(id);
         }

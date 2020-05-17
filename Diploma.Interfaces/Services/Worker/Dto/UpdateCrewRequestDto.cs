@@ -6,6 +6,6 @@ namespace Diploma.Interfaces.Services.Worker.Dto
     {
         public int CrewId { get; set; }
 
-        public IEnumerable<int> WorkerIds { get; set; }
+        public IEnumerable<string> WorkerIds { get; set; }
     }
 }

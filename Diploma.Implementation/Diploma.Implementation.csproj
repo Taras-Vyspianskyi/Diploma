@@ -5,7 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Diploma.Interfaces\Diploma.Interfaces.csproj" />
+    <ProjectReference Include="..\Diploma.Utils\Diploma.Utils.csproj" />
   </ItemGroup>
 
 </Project>

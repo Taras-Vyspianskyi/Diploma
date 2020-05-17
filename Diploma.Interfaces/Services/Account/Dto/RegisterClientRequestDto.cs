@@ -10,7 +10,7 @@ namespace Diploma.Interfaces.Services.Account.Dto
 
         public string Email { get; set; }
 
-        public string Phone { get; set; }
+        public string PhoneNumber { get; set; }
 
         public TransportTypeEnum TransportType { get; set; }
 

@@ -5,17 +5,19 @@ namespace Diploma.Interfaces.Entities
 {
     public class Order
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
-        public int CrewId { get; set; }
+        public string OrderId { get; set; }
 
-        public int CustomerId { get; set; }
+        public string CrewId { get; set; }
 
-        public int OperatorId { get; set; }
+        public string CustomerId { get; set; }
+
+        public string OperatorId { get; set; }
 
         public WorkerCategoryEnum Category { get; set; }
 
-        public DateTime OrderTime { get; set; }
+        public DateTime Time { get; set; }
 
         public ExecutionStatusEnum Status { get;set; }
 
