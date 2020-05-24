@@ -11,29 +11,29 @@ namespace Diploma.Implementation.Services.Customer
 {
     public class CustomerService : BaseService, ICustomerService
     {
-        public readonly UserManager<Interfaces.Entities.User> UserManager;
-        public readonly IUnitOfWork UnitOfWork;
+        public readonly UserManager<Interfaces.Entities.User> userManager;
+        public readonly IUnitOfWork unitOfWork;
 
         public CustomerService(
             UserManager<Interfaces.Entities.User> userManager,
             IUnitOfWork unitOfWork)
         {
-            UserManager = userManager;
-            UnitOfWork = unitOfWork;
+            this.userManager = userManager;
+            this.unitOfWork = unitOfWork;
         }
 
         public Task<GetCustomerInfoResponseDto> GetCustomerInfo(GetCustomerInfoRequestDto requestDto)
         {
             return ErrorHandler.HandleRequestAsync(async () =>
             {
-                var user = await UserManager.GetUserAsync(requestDto.ClaimsPrincipal);
+                var user = await userManager.GetUserAsync(requestDto.ClaimsPrincipal);
 
                 if (user == null)
                 {
                     return new GetCustomerInfoResponseDto().AsError("User not found");
                 }
 
-                var customerData = (await UnitOfWork.CustomerRepository.FilterByAsync(c => c.UserId == user.Id)).First();
+                var customerData = (await unitOfWork.CustomerRepository.FilterByAsync(c => c.UserId == user.Id)).First();
 
                 if (user == null)
                 {
@@ -46,8 +46,7 @@ namespace Diploma.Implementation.Services.Customer
                     Surname = user.Surname,
                     Email = user.Email,
                     PhoneNumber = user.PhoneNumber,
-                    AddressLine1 = customerData.AddressLine1,
-                    AddressLine2 = customerData.AddressLine2
+                    Coordinates = customerData.Coordinates
                 }.AsSuccess();
             });
         }
@@ -56,7 +55,7 @@ namespace Diploma.Implementation.Services.Customer
         {
             return ErrorHandler.HandleRequestAsync(async () =>
             {
-                var user = await UserManager.GetUserAsync(requestDto.ClaimsPrincipal);
+                var user = await userManager.GetUserAsync(requestDto.ClaimsPrincipal);
 
                 if (user == null)
                 {
@@ -67,29 +66,27 @@ namespace Diploma.Implementation.Services.Customer
                 user.Surname = requestDto.Surname;
                 user.PhoneNumber = requestDto.PhoneNumber;
 
-                var customerData = await UnitOfWork.CustomerRepository.GetByIdAsync(user.Id);
+                var customerData = await unitOfWork.CustomerRepository.GetByIdAsync(user.Id);
 
                 if (customerData == null)
                 {
                     return new UpdateCustomerInfoResponseDto().AsError("Customer not found");
                 }
 
-                customerData.AddressLine1 = requestDto.AddressLine1;
-                customerData.AddressLine2 = requestDto.AddressLine2;
+                customerData.Coordinates = requestDto.Coordinates;
 
-                UnitOfWork.CustomerRepository.Update(customerData);
+                unitOfWork.CustomerRepository.Update(customerData);
 
-                await UserManager.UpdateAsync(user);
+                await userManager.UpdateAsync(user);
 
-                await UnitOfWork.SaveAsync();
+                await unitOfWork.SaveAsync();
 
                 return new UpdateCustomerInfoResponseDto
                 {
                     Name = user.Name,
                     Surname = user.Surname,
                     PhoneNumber = user.PhoneNumber,
-                    AddressLine1 = customerData.AddressLine1,
-                    AddressLine2 = customerData.AddressLine2
+                    Coordinates = customerData.Coordinates,
                 }.AsSuccess();
             });
         }

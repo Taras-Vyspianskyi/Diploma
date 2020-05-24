@@ -18,7 +18,7 @@ namespace Diploma.Interfaces.Services.Account.Dto
 
         public UserTypeEnum UserType { get; set; }
 
-        public string AddressLine1 { get; set; }
+        public string Coordinates { get; set; }
 
         public string AddressLine2 { get; set; }
 

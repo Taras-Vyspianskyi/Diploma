@@ -14,5 +14,7 @@ namespace Diploma.Interfaces.UnitOfWork
         IOrderRepository OrderRepository { get; }
 
         IWorkerRepository WorkerRepository { get; }
+
+        ITimeToOrderRepository TimeToOrderRepository { get; }
     }
 }

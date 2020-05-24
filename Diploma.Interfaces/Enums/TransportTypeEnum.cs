@@ -6,13 +6,13 @@ namespace Diploma.Interfaces.Enums
     {
         Unknown = 0,
 
-        [Description("Car")]
+        [Description("driving-traffic")]
         Car = 1,
 
-        [Description("Bicycle")]
+        [Description("cycling")]
         Bicycle = 2,
 
-        [Description("Legs")]
+        [Description("walking")]
         Legs = 3
     }
 }

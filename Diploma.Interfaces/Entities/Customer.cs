@@ -2,10 +2,12 @@
 {
     public class Customer
     {
+        public int Id { get; set; }
+
         public string UserId { get; set; }
 
-        public string AddressLine1 { get; set; }
+        public string Coordinates { get; set; }
 
-        public string AddressLine2 { get; set; }
+        public User User { get; set; }
     }
 }

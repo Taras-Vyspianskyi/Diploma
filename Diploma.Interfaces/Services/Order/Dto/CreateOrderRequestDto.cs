@@ -6,13 +6,13 @@ namespace Diploma.Interfaces.Services.Order.Dto
     {
         public string CustomerId { get; set; }
 
-        public string AddressLine1 { get; set; }
+        public string Coordinates { get; set; }
 
         public string AddressLine2 { get; set; }
 
         public string OperatorId { get; set; }
 
-        public string CrewId { get; set; }
+        public int CrewId { get; set; }
 
         public WorkerCategoryEnum Category { get; set; }
     }

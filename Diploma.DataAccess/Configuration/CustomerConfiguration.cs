@@ -8,13 +8,13 @@ namespace Diploma.DataAccess.Configuration
     {
         public void Configure(EntityTypeBuilder<Customer> builder)
         {
+            builder.HasKey(b => b.Id);
+
             builder.Property(b => b.UserId)
                 .IsRequired();
 
-            builder.Property(b => b.AddressLine1)
+            builder.Property(b => b.Coordinates)
                 .IsRequired();
-
-            builder.Property(b => b.AddressLine2);
         }
     }
 }

@@ -8,6 +8,8 @@ namespace Diploma.DataAccess.Configuration
     {
         public void Configure(EntityTypeBuilder<Worker> builder)
         {
+            builder.HasKey(b => b.Id);
+
             builder.Property(b => b.UserId)
                 .IsRequired();
 

@@ -2,26 +2,38 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Diploma.Interfaces.Enums;
+using Diploma.Interfaces.Services.Elastic;
+using Diploma.Interfaces.Services.Elastic.Dto;
 using Diploma.Interfaces.Services.Order;
 using Diploma.Interfaces.Services.Order.Dto;
+using Diploma.Interfaces.Services.RouteProvider;
+using Diploma.Interfaces.Services.RouteProvider.Dto;
 using Diploma.Interfaces.UnitOfWork;
 using Diploma.Utils.ErrorHandling;
 using Diploma.Utils.Extensions;
 using Microsoft.AspNetCore.Identity;
+using Nest;
 
 namespace Diploma.Implementation.Services.Order
 {
     public class OrderService : BaseService, IOrderService
     {
-        public readonly UserManager<Interfaces.Entities.User> UserManager;
-        public readonly IUnitOfWork UnitOfWork;
+        public readonly UserManager<Interfaces.Entities.User> userManager;
+        public readonly IUnitOfWork unitOfWork;
+        public readonly IElasticService elasticService;
+        public readonly IRouteService routeService;
 
         public OrderService(
             UserManager<Interfaces.Entities.User> userManager,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IElasticService elasticService,
+            IRouteService routeService)
         {
-            UserManager = userManager;
-            UnitOfWork = unitOfWork;
+            this.userManager = userManager;
+            this.unitOfWork = unitOfWork;
+            this.elasticService = elasticService;
+            this.routeService = routeService;
         }
 
         public Task<CreateOrderResponseDto> CreateOrder(CreateOrderRequestDto requestDto)
@@ -37,13 +49,48 @@ namespace Diploma.Implementation.Services.Order
                     Category = requestDto.Category,
                     OperatorId = requestDto.OperatorId,
                     CrewId = requestDto.CrewId,
-                    AddressLine1 = requestDto.AddressLine1,
+                    Coordinates = requestDto.Coordinates,
                     AddressLine2 = requestDto.AddressLine2,
                     Time = time,
-                    Status = Interfaces.Enums.ExecutionStatusEnum.Pending
+                    Status = ExecutionStatusEnum.Pending
                 };
 
-                await UnitOfWork.OrderRepository.AddAsync(newOrder);
+                await unitOfWork.OrderRepository.AddAsync(newOrder);
+
+                var lastCrewOrderCoords = (await unitOfWork.OrderRepository.FilterByAsync(x => x.CrewId == requestDto.CrewId)).OrderByDescending(x => x.Id).First().Coordinates;
+
+                var transportType = (await unitOfWork.WorkerRepository.FilterByAsync(x => x.CrewId == requestDto.CrewId)).First().TransportType;
+
+                var minutes = (await routeService.GetRouteTime(new GetRouteTimeRequestDto
+                {
+                    CoordinatesFrom = lastCrewOrderCoords,
+                    CoordinatesTo = requestDto.Coordinates,
+                    TransportType = transportType.GetDescription()
+                })).Minutes;
+
+                await unitOfWork.TimeToOrderRepository.AddAsync(new Interfaces.Entities.TimeToOrder
+                {
+                    OrderId = newOrder.OrderId,
+                    Minutes = minutes
+                });
+
+                await unitOfWork.SaveAsync();
+
+                var crewAvailability = await elasticService.SearchCrew(requestDto.CrewId);
+                double currentAvailability = 0;
+
+                if (crewAvailability != null)
+                {
+                    currentAvailability = crewAvailability.Minutes;
+                }
+
+                currentAvailability += minutes + 60;
+
+                await elasticService.CreateOrUpdateCrewAvailability(new CrewAvailability
+                { 
+                    CrewId = requestDto.CrewId,
+                    Minutes = currentAvailability
+                });
 
                 return new CreateOrderResponseDto
                 {
@@ -56,15 +103,15 @@ namespace Diploma.Implementation.Services.Order
         {
             return ErrorHandler.HandleRequestAsync(async () =>
             {
-                var order = await UnitOfWork.OrderRepository.GetByIdAsync(requestDto.OrderId);
+                var order = await unitOfWork.OrderRepository.GetByIdAsync(requestDto.OrderId);
 
                 order.Status = requestDto.Status;
                 order.Time = DateTime.Now;
-                order.Id = string.Empty;
+                order.Id = default;
 
-                await UnitOfWork.OrderRepository.AddAsync(order);
+                await unitOfWork.OrderRepository.AddAsync(order);
 
-                await UnitOfWork.SaveAsync();
+                await unitOfWork.SaveAsync();
 
                 return new UpdateOrderStatusResponseDto
                 {
@@ -78,7 +125,7 @@ namespace Diploma.Implementation.Services.Order
         {
             return ErrorHandler.HandleRequestAsync(async () =>
             {
-                var orders = (await UnitOfWork.OrderRepository.FilterByAsync(o => o.OrderId == requestDto.OrderId));
+                var orders = (await unitOfWork.OrderRepository.FilterByAsync(o => o.OrderId == requestDto.OrderId));
 
                 return new GetOrderInfoResponseDto
                 {

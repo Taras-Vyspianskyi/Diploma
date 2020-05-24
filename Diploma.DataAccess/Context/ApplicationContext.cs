@@ -23,6 +23,7 @@ namespace Diploma.DataAccess.Context
             builder.ApplyConfiguration(new OrderConfiguration());
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new WorkerConfiguration());
+            builder.ApplyConfiguration(new TimeToOrderConfiguration());
         }
     }
 }

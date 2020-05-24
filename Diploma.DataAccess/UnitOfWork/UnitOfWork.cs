@@ -18,6 +18,7 @@ namespace Diploma.DataAccess.UnitOfWork
             this.CustomerRepository = new CustomerRepository(context);
             this.OrderRepository = new OrderRepository(context);
             this.WorkerRepository = new WorkerRepository(context);
+            this.TimeToOrderRepository = new TimeToOrderRepository(context);
         }
 
         public IUserRepository UserRepository { get; set; }
@@ -27,6 +28,8 @@ namespace Diploma.DataAccess.UnitOfWork
         public IOrderRepository OrderRepository { get; set; }
 
         public IWorkerRepository WorkerRepository { get; set; }
+
+        public ITimeToOrderRepository TimeToOrderRepository { get; set; }
 
         public void Dispose()
         {

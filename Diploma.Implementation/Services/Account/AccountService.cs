@@ -12,10 +12,10 @@ namespace Diploma.Implementation.Services.Account
 {
     public class AccountService : BaseService, IAccountService
     {
-        public readonly UserManager<Interfaces.Entities.User> UserManager;
-        public readonly SignInManager<Interfaces.Entities.User> SignInManager;
-        public readonly RoleManager<IdentityRole> RoleManager;
-        public readonly IUnitOfWork UnitOfWork;
+        public readonly UserManager<Interfaces.Entities.User> userManager;
+        public readonly SignInManager<Interfaces.Entities.User> signInManager;
+        public readonly RoleManager<IdentityRole> roleManager;
+        public readonly IUnitOfWork unitOfWork;
 
         public AccountService(
             UserManager<Interfaces.Entities.User> userManager,
@@ -23,17 +23,17 @@ namespace Diploma.Implementation.Services.Account
             RoleManager<IdentityRole> roleManager,
             IUnitOfWork unitOfWork)
         {
-            UserManager = userManager;
-            SignInManager = signInManager;
-            RoleManager = roleManager;
-            UnitOfWork = unitOfWork;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+            this.roleManager = roleManager;
+            this.unitOfWork = unitOfWork;
         }
 
         public Task<LoginResponseDto> Login(LoginRequestDto requestDto)
         {
             return ErrorHandler.HandleRequestAsync(async () =>
             {
-                var authResult = await SignInManager.PasswordSignInAsync(
+                var authResult = await signInManager.PasswordSignInAsync(
                 requestDto.Email,
                 requestDto.Password,
                 true,
@@ -50,7 +50,7 @@ namespace Diploma.Implementation.Services.Account
         {
             return ErrorHandler.HandleRequestAsync(async () =>
             {
-                await SignInManager.SignOutAsync();
+                await signInManager.SignOutAsync();
 
                 return new LogoutResponseDto().AsSuccess();
             });
@@ -69,7 +69,7 @@ namespace Diploma.Implementation.Services.Account
                     PhoneNumber = requestDto.PhoneNumber
                 };
 
-                var result = await UserManager.CreateAsync(user, requestDto.Password);
+                var result = await userManager.CreateAsync(user, requestDto.Password);
 
                 if (!result.Succeeded)
                 {
@@ -80,29 +80,28 @@ namespace Diploma.Implementation.Services.Account
                 {
                     if (requestDto.UserType == UserTypeEnum.Worker)
                     {
-                        await UnitOfWork.WorkerRepository.AddAsync(new Interfaces.Entities.Worker
+                        await unitOfWork.WorkerRepository.AddAsync(new Interfaces.Entities.Worker
                         {
                             UserId = user.Id,
                             Category = requestDto.Category,
                             TransportType = requestDto.TransportType
                         });
 
-                        await UnitOfWork.SaveAsync();
+                        await unitOfWork.SaveAsync();
 
-                        await UserManager.AddToRoleAsync(user, nameof(UserTypeEnum.Worker));
+                        await userManager.AddToRoleAsync(user, nameof(UserTypeEnum.Worker));
                     }
                     else if (requestDto.UserType == UserTypeEnum.Customer)
                     {
-                        await UnitOfWork.CustomerRepository.AddAsync(new Interfaces.Entities.Customer
+                        await unitOfWork.CustomerRepository.AddAsync(new Interfaces.Entities.Customer
                         {
                             UserId = user.Id,
-                            AddressLine1 = requestDto.AddressLine1,
-                            AddressLine2 = requestDto.AddressLine2
+                            Coordinates = requestDto.Coordinates,
                         });
 
-                        await UnitOfWork.SaveAsync();
+                        await unitOfWork.SaveAsync();
 
-                        await UserManager.AddToRoleAsync(user, nameof(UserTypeEnum.Customer));
+                        await userManager.AddToRoleAsync(user, nameof(UserTypeEnum.Customer));
                     }
                     else
                     {
@@ -111,7 +110,7 @@ namespace Diploma.Implementation.Services.Account
                 }
                 catch (Exception ex)
                 {
-                    await UserManager.DeleteAsync(user);
+                    await userManager.DeleteAsync(user);
                     throw new Exception("Registration failed", ex);
                 }
 
@@ -135,7 +134,7 @@ namespace Diploma.Implementation.Services.Account
                     PhoneNumber = requestDto.PhoneNumber
                 };
 
-                var result = await UserManager.CreateAsync(user, requestDto.Password);
+                var result = await userManager.CreateAsync(user, requestDto.Password);
 
                 if (!result.Succeeded)
                 {
@@ -154,9 +153,9 @@ namespace Diploma.Implementation.Services.Account
         {
             return ErrorHandler.HandleRequestAsync(async () =>
             {
-                var user = await UserManager.GetUserAsync(requestDto.ClaimsPrincipal);
+                var user = await userManager.GetUserAsync(requestDto.ClaimsPrincipal);
 
-                await UserManager.ChangePasswordAsync(user, requestDto.OldPassword, requestDto.NewPassword);
+                await userManager.ChangePasswordAsync(user, requestDto.OldPassword, requestDto.NewPassword);
 
                 return new UpdatePasswordResponseDto().AsSuccess();
             });

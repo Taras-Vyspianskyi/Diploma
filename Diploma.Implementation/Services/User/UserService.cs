@@ -10,22 +10,22 @@ namespace Diploma.Implementation.Services.User
 {
     public class UserService : BaseService, IUserService
     {
-        public readonly UserManager<Interfaces.Entities.User> UserManager;
-        public readonly IUnitOfWork UnitOfWork;
+        public readonly UserManager<Interfaces.Entities.User> userManager;
+        public readonly IUnitOfWork unitOfWork;
 
         public UserService(
             UserManager<Interfaces.Entities.User> userManager,
             IUnitOfWork unitOfWork)
         {
-            UserManager = userManager;
-            UnitOfWork = unitOfWork;
+            this.userManager = userManager;
+            this.unitOfWork = unitOfWork;
         }
 
         public Task<GetUserInfoResponseDto> GetUserInfo(GetUserInfoRequestDto requestDto)
         {
             return ErrorHandler.HandleRequestAsync(async () =>
             {
-                var user = await UserManager.GetUserAsync(requestDto.ClaimsPrincipal);
+                var user = await userManager.GetUserAsync(requestDto.ClaimsPrincipal);
 
                 if (user == null)
                 {
@@ -46,7 +46,7 @@ namespace Diploma.Implementation.Services.User
         {
             return ErrorHandler.HandleRequestAsync(async () =>
             {
-                var user = await UserManager.GetUserAsync(requestDto.ClaimsPrincipal);
+                var user = await userManager.GetUserAsync(requestDto.ClaimsPrincipal);
 
                 if (user == null)
                 {
@@ -57,9 +57,9 @@ namespace Diploma.Implementation.Services.User
                 user.Surname = requestDto.Surname;
                 user.PhoneNumber = requestDto.PhoneNumber;
 
-                await UserManager.UpdateAsync(user);
+                await userManager.UpdateAsync(user);
 
-                await UnitOfWork.SaveAsync();
+                await unitOfWork.SaveAsync();
 
                 return new UpdateUserInfoResponseDto
                 {

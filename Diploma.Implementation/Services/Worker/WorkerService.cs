@@ -12,22 +12,22 @@ namespace Diploma.Implementation.Services.Worker
 {
     public class WorkerService : BaseService, IWorkerService
     {
-        public readonly UserManager<Interfaces.Entities.User> UserManager;
-        public readonly IUnitOfWork UnitOfWork;
+        public readonly UserManager<Interfaces.Entities.User> userManager;
+        public readonly IUnitOfWork unitOfWork;
 
         public WorkerService(
             UserManager<Interfaces.Entities.User> userManager,
             IUnitOfWork unitOfWork)
         {
-            UserManager = userManager;
-            UnitOfWork = unitOfWork;
+            this.userManager = userManager;
+            this.unitOfWork = unitOfWork;
         }
 
         public Task<GetCrewMembersResponseDto> GetCrewMembers(GetCrewMembersRequestDto requestDto)
         {
             return ErrorHandler.HandleRequestAsync(async () =>
             {
-                var workers = await UnitOfWork.WorkerRepository.FilterByAsync(c => c.CrewId == requestDto.CrewId);
+                var workers = await unitOfWork.WorkerRepository.FilterByAsync(c => c.CrewId == requestDto.CrewId);
 
                 if (workers == null)
                 {
@@ -38,7 +38,7 @@ namespace Diploma.Implementation.Services.Worker
 
                 foreach (var worker in workers)
                 {
-                    var user = await UnitOfWork.UserRepository.GetByIdAsync(worker.UserId);
+                    var user = await unitOfWork.UserRepository.GetByIdAsync(worker.UserId);
 
                     if (user == null)
                     {
@@ -71,7 +71,7 @@ namespace Diploma.Implementation.Services.Worker
             {
                 foreach (var workerId in requestDto.WorkerIds)
                 {
-                    var worker = await UnitOfWork.WorkerRepository.GetByIdAsync(workerId);
+                    var worker = await unitOfWork.WorkerRepository.GetByIdAsync(workerId);
 
                     if (worker == null)
                     {
@@ -80,10 +80,10 @@ namespace Diploma.Implementation.Services.Worker
 
                     worker.CrewId = requestDto.CrewId;
 
-                    UnitOfWork.WorkerRepository.Update(worker);
+                    unitOfWork.WorkerRepository.Update(worker);
                 }
 
-                await UnitOfWork.SaveAsync();
+                await unitOfWork.SaveAsync();
 
                 return new UpdateCrewResponseDto().AsSuccess();
             });
@@ -93,14 +93,14 @@ namespace Diploma.Implementation.Services.Worker
         {
             return ErrorHandler.HandleRequestAsync(async () =>
             {
-                var user = await UserManager.GetUserAsync(requestDto.ClaimsPrincipal);
+                var user = await userManager.GetUserAsync(requestDto.ClaimsPrincipal);
 
                 if (user == null)
                 {
                     return new GetWorkerInfoResponseDto().AsError("User not found");
                 }
 
-                var workerData = (await UnitOfWork.WorkerRepository.FilterByAsync(w => w.UserId == user.Id)).First();
+                var workerData = (await unitOfWork.WorkerRepository.FilterByAsync(w => w.UserId == user.Id)).First();
 
                 if (workerData == null)
                 {
@@ -125,7 +125,7 @@ namespace Diploma.Implementation.Services.Worker
         {
             return ErrorHandler.HandleRequestAsync(async () =>
             {
-                var user = await UserManager.GetUserAsync(requestDto.ClaimsPrincipal);
+                var user = await userManager.GetUserAsync(requestDto.ClaimsPrincipal);
 
                 if (user == null)
                 {
@@ -136,7 +136,7 @@ namespace Diploma.Implementation.Services.Worker
                 user.Surname = requestDto.Surname ?? user.Surname;
                 user.PhoneNumber = requestDto.PhoneNumber ?? user.PhoneNumber;
 
-                var workerData = await UnitOfWork.WorkerRepository.GetByIdAsync(user.Id);
+                var workerData = await unitOfWork.WorkerRepository.GetByIdAsync(user.Id);
 
                 if (workerData == null)
                 {
@@ -146,11 +146,11 @@ namespace Diploma.Implementation.Services.Worker
                 workerData.Category = requestDto.Category != 0 ? requestDto.Category : workerData.Category;
                 workerData.TransportType = requestDto.TransportType != 0 ? requestDto.TransportType : workerData.TransportType;
 
-                UnitOfWork.WorkerRepository.Update(workerData);
+                unitOfWork.WorkerRepository.Update(workerData);
 
-                await UserManager.UpdateAsync(user);
+                await userManager.UpdateAsync(user);
 
-                await UnitOfWork.SaveAsync();
+                await unitOfWork.SaveAsync();
 
                 return new UpdateWorkerInfoResponseDto
                 { 
