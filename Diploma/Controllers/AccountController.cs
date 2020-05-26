@@ -3,7 +3,6 @@ using Diploma.Interfaces.Services.Account;
 using Diploma.Interfaces.Services.Account.Dto;
 using Diploma.Utils.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 
 namespace Diploma.Controllers

@@ -50,14 +50,13 @@ namespace Diploma.Implementation.Services.Order
                     OperatorId = requestDto.OperatorId,
                     CrewId = requestDto.CrewId,
                     Coordinates = requestDto.Coordinates,
-                    AddressLine2 = requestDto.AddressLine2,
                     Time = time,
                     Status = ExecutionStatusEnum.Pending
                 };
 
                 await unitOfWork.OrderRepository.AddAsync(newOrder);
 
-                var lastCrewOrderCoords = (await unitOfWork.OrderRepository.FilterByAsync(x => x.CrewId == requestDto.CrewId)).OrderByDescending(x => x.Id).First().Coordinates;
+                var lastCrewOrderCoords = (await unitOfWork.OrderRepository.FilterByAsync(x => x.CrewId == requestDto.CrewId)).OrderByDescending(x => x.Id).Take(1).First().Coordinates;
 
                 var transportType = (await unitOfWork.WorkerRepository.FilterByAsync(x => x.CrewId == requestDto.CrewId)).First().TransportType;
 

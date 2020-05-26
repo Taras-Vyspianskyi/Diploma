@@ -30,8 +30,6 @@ namespace Diploma.DataAccess.Configuration
 
             builder.Property(b => b.Coordinates)
                 .IsRequired();
-
-            builder.Property(b => b.AddressLine2);
         }
     }
 }

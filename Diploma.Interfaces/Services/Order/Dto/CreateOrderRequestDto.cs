@@ -8,8 +8,6 @@ namespace Diploma.Interfaces.Services.Order.Dto
 
         public string Coordinates { get; set; }
 
-        public string AddressLine2 { get; set; }
-
         public string OperatorId { get; set; }
 
         public int CrewId { get; set; }

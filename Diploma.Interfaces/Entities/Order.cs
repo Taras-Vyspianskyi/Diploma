@@ -23,8 +23,6 @@ namespace Diploma.Interfaces.Entities
 
         public string Coordinates { get; set; }
 
-        public string AddressLine2 { get; set; }
-
         public Customer Customer { get; set; }
 
         public User User { get; set; }
